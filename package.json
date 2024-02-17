@@ -1,0 +1,21 @@
+{
+  "name": "dyno-orm",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.515.0",
+    "@aws-sdk/lib-dynamodb": "^3.515.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.19",
+    "prettier": "^3.2.5",
+    "vitest": "^1.3.0"
+  }
+}

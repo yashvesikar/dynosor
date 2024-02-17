@@ -1,0 +1,25 @@
+
+version: "3"
+
+services:
+  dynamodb-persistent:
+    container_name: dynamodb-persistent
+    image: amazon/dynamodb-local
+    command: -jar DynamoDBLocal.jar -sharedDb -dbPath /home/dynamodblocal/data/ -disableTelemetry
+    networks:
+      - dynamodb-network
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/home/dynamodblocal/data
+  dynamodb-admin:
+    container_name: dynamodb-admin
+    image: aaronshaf/dynamodb-admin
+    environment:
+      DYNAMO_ENDPOINT: http://dynamodb-persistent:8000
+    ports:
+      - "8001:8001"
+    networks:
+      - dynamodb-network
+networks:
+  dynamodb-network:
