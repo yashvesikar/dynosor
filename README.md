@@ -1,4 +1,6 @@
-## Dyno-ORM
+## DynoSOR
+
+_DynamoDB Structured Object Relations_
 
 This is currently a POC for a better Typescript DynamoDB ORM-like service.
 
@@ -15,7 +17,11 @@ Install the POC
 npm i -S git+https://github.com/yashvesikar/dyno-orm.git
 ```
 
-Create a new service using a zod entity based on your database record.
+### Usage
+
+#### Basic Usage
+
+Simplest way to use is to pass the entity definition and DynamoDB client configurations directly into the `createService` function.
 
 ```
 import { createService } from "dyno-orm";
@@ -30,6 +36,37 @@ const { entity: User, service: UserService } = createService(
             ... your dynamodb client configurations
         }
     }
+)
+```
+
+#### Extending BaseService
+
+To customize and extend the `BaseService` the `createService` function takes an optional `service` parameter.
+
+```
+import { BaseService, createService } from "dyno-orm";
+
+const entity = z.object({
+        ... your attributes
+    });
+
+class CustomService extends BaseService<typeof entity>{
+    async customGet() {
+        // has access to BaseService attributes like this.table
+        // can use super.get()
+    }
+}
+
+// UserService will be an instance of CustomService
+const { entity: User, service: UserService } = createService(
+    entity,
+    {
+        client: {
+            region: "us-east-1",
+            ... your dynamodb client configurations
+        }
+    },
+    CustomService
 )
 ```
 

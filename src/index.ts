@@ -179,12 +179,22 @@ export class BaseService<S extends z.ZodTypeAny> {
   }
 }
 
-export function createService<T extends z.AnyZodObject>(
+export function createService<T extends z.AnyZodObject, S extends BaseService<T>>(
   entity: T,
   options: ConstructorParameters<typeof BaseService>["1"],
-) {
+  customService?: new (entity: T, options: ConstructorParameters<typeof BaseService>["1"]) => S,
+): { entity: T; service: S } {
+  if (customService) {
+    if (customService.prototype instanceof BaseService) {
+      return {
+        entity,
+        service: new customService(entity, options),
+      };
+    }
+    throw new Error("Service must extend BaseService");
+  }
   return {
     entity,
-    service: new BaseService(entity, options),
+    service: new BaseService(entity, options) as S,
   };
 }
